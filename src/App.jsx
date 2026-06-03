@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import profile from "./assets/profile.jpeg";
+import { motion } from "framer-motion";
 
 import {
   FaPython,
@@ -51,6 +52,21 @@ export default function PortfolioWebsite() {
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 80,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+    },
+  },
+};
 
   useEffect(() => {
 
@@ -172,7 +188,12 @@ export default function PortfolioWebsite() {
 
         <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 flex flex-col items-center">
+        <motion.div
+  className="relative z-10 flex flex-col items-center"
+  initial={{ opacity: 0, y: 50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+>
 
           {/* PROFILE IMAGE */}
           <div className="p-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 shadow-2xl shadow-blue-500/30 animate-pulse">
@@ -225,12 +246,19 @@ export default function PortfolioWebsite() {
 
           </div>
 
-        </div>
+        </motion.div>
 
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="py-28 px-6">
+      <motion.section
+  id="about"
+  className="py-28 px-6"
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.2 }}
+>
 
         <div className="max-w-5xl mx-auto text-center">
 
@@ -254,7 +282,7 @@ export default function PortfolioWebsite() {
 
         </div>
 
-      </section>
+      </motion.section>
 
       {/* EDUCATION */}
       <section id="education" className="py-28 px-6">
@@ -332,22 +360,17 @@ export default function PortfolioWebsite() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
 
             {skills.map((skill, i) => (
-
-              <div
-                key={i}
-                className="
-                  bg-white/5
-                  backdrop-blur-xl
-                  border border-blue-900/20
-                  rounded-3xl
-                  p-10
-                  hover:border-cyan-400
-                  hover:scale-105
-                  hover:shadow-[0_0_40px_rgba(34,211,238,0.15)]
-                  transition duration-500
-                  flex flex-col items-center
-                "
-              >
+  <motion.div
+    key={i}
+    initial={{ opacity: 0, scale: 0.8 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    transition={{
+      duration: 0.4,
+      delay: i * 0.15,
+    }}
+    viewport={{ once: true }}
+  >
+              
 
                 <div className="text-6xl text-blue-400 mb-5">
                   {skill.icon}
@@ -357,9 +380,10 @@ export default function PortfolioWebsite() {
                   {skill.name}
                 </p>
 
-              </div>
+              </motion.div>
+))}
 
-            ))}
+           
 
           </div>
 
