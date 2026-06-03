@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import profile from "./assets/profile.jpeg";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
+import { useRef } from "react";
 
 import {
   FaPython,
@@ -18,6 +20,7 @@ import {
 } from "react-icons/fa";
 
 export default function PortfolioWebsite() {
+  const formRef = useRef();
 
   const skills = [
     {
@@ -109,6 +112,25 @@ export default function PortfolioWebsite() {
     return () => clearTimeout(timer);
 
   }, [text, isDeleting, roleIndex]);
+  const sendEmail = (e) => {
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_ogwf15i",
+    "template_ynw42oo",
+    formRef.current,
+    "KzB0Kzs8JEwnv6Ljt"
+  )
+  .then(() => {
+    alert("Message sent successfully!");
+  })
+  .catch((error) => {
+  console.log("EmailJS FULL ERROR:", error);
+  alert(error?.text || "Failed to send message!");
+});
+
+  e.target.reset();
+};
 
   return (
 
@@ -757,32 +779,35 @@ export default function PortfolioWebsite() {
             {/* FORM */}
             <div className="bg-white/5 backdrop-blur-xl border border-blue-900/20 rounded-3xl p-8">
 
-              <form className="space-y-6">
+              <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
 
                 <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
-                />
+  name="from_name"
+  type="text"
+  placeholder="Your Name"
+  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
+/>
 
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
-                />
+               <input
+  name="from_email"
+  type="email"
+  placeholder="Your Email"
+  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
+/>
 
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
-                />
+               <input
+  name="subject"
+  type="text"
+  placeholder="Subject"
+  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400"
+/>
 
                 <textarea
-                  rows="5"
-                  placeholder="Message"
-                  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400 resize-none"
-                ></textarea>
-
+  name="message"
+  rows="5"
+  placeholder="Message"
+  className="w-full bg-black/40 border border-blue-900/20 rounded-xl px-5 py-4 outline-none focus:border-blue-400 resize-none"
+></textarea>
                 <button
                   type="submit"
                   className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition duration-300"
